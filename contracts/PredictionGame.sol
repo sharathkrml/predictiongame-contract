@@ -16,7 +16,7 @@ contract PredictionGame is KeeperCompatible {
         address from;
     }
     event NewPrediction(int value, uint time, address from);
-    event Result(Prediction[]);
+    event Result(int actual, Prediction[]);
     event ContestCancelled();
     uint[10] public rewardArray = [
         4000000000000000000,
@@ -61,6 +61,11 @@ contract PredictionGame is KeeperCompatible {
         }
     }
 
+    function currentResult() external view returns (int) {
+        (, int price, , , ) = priceFeed.latestRoundData();
+        return price;
+    }
+
     function getResult() internal {
         (, int _actualValue, , , ) = priceFeed.latestRoundData();
         if (predictions.length < 10) {
@@ -87,7 +92,7 @@ contract PredictionGame is KeeperCompatible {
                 }
             }
         }
-        emit Result(predictions);
+        emit Result(_actualValue, predictions);
         for (uint i = 0; i < 10; i++) {
             IGameToken.transfer(predictions[i].from, rewardArray[i]);
         }
