@@ -80,5 +80,29 @@ describe("PredictionGame", () => {
       //   console.log(await GameContract.predictions(i));
       // }
     })
+
+
+    it("more than 10", async () => {
+      let arr = [3, 4, 5, 4, 3, 5, 4, 3, 2, 1, 1]
+      for (let i = 0; i < 11; i++) {
+        await GameTokenContract.connect(accounts[i]).mint();
+        let b = await GameTokenContract.connect(accounts[i]).approve(GameContract.address, ethers.utils.parseEther("1"))
+        let res = await GameTokenContract.allowance(accounts[i].address, GameContract.address);
+        let a = await GameContract.connect(accounts[i]).predict(i + 1);
+      }
+      // let count = await GameContract.count();
+      // for (let i = 0; i < count; i++) {
+      //   console.log(await GameContract.predictions(i));
+      // }
+      console.log("before", await GameTokenContract.balanceOf(GameContract.address));
+
+      let res = await GameContract.getResult(5);
+      let a = await res.wait()
+      console.log("after", await GameTokenContract.balanceOf(GameContract.address));
+      // let count = await GameContract.count();
+      // for (let i = 0; i < count; i++) {
+      //   console.log(await GameContract.predictions(i));
+      // }
+    })
   })
 });
