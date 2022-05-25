@@ -2,9 +2,10 @@
 
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract PredictionGame {
+    IERC20 IGameToken;
     struct Prediction {
         uint value;
         uint time;
@@ -13,10 +14,28 @@ contract PredictionGame {
     }
     event NewPrediction(uint value, uint time, address from);
     event Result(Prediction[]);
+    event ContestCancelled();
+    uint[10] public rewardArray = [
+        4000000000000000000,
+        2500000000000000000,
+        1500000000000000000,
+        750000000000000000,
+        250000000000000000,
+        200000000000000000,
+        200000000000000000,
+        200000000000000000,
+        200000000000000000,
+        200000000000000000
+    ];
     Prediction[] public predictions;
+
+    constructor(address _tokenAddress) {
+        IGameToken = IERC20(_tokenAddress);
+    }
 
     function predict(uint _value) external {
         require(predictions.length < 10, "maximum predictions completed");
+        IGameToken.transferFrom(msg.sender, address(this), 1 ether);
         predictions.push(Prediction(_value, block.timestamp, 0, msg.sender));
         emit NewPrediction(_value, block.timestamp, msg.sender);
     }
@@ -30,7 +49,13 @@ contract PredictionGame {
     }
 
     function getResult(uint _actualValue) external {
-        // emit Result and reset
+        if (predictions.length < 10) {
+            emit ContestCancelled();
+            for (uint i = 0; i < predictions.length; i++) {
+                IGameToken.transfer(predictions[i].from, 1 ether);
+            }
+            return delete predictions;
+        }
         Prediction memory temp;
         _getDifference(_actualValue);
         for (uint i = 0; i < predictions.length; i++) {
@@ -49,6 +74,9 @@ contract PredictionGame {
             }
         }
         emit Result(predictions);
+        for (uint i = 0; i < 10; i++) {
+            IGameToken.transfer(predictions[i].from, rewardArray[i]);
+        }
         delete predictions;
     }
 }
