@@ -37,12 +37,11 @@ contract PredictionGame is KeeperCompatible {
     constructor(
         address _tokenAddress,
         address _AggregatorAddress,
-        uint _lastTimeStamp,
         uint _interval
     ) {
         IGameToken = IERC20(_tokenAddress);
         priceFeed = AggregatorV3Interface(_AggregatorAddress);
-        lastTimeStamp = _lastTimeStamp;
+        lastTimeStamp = block.timestamp;
         interval = _interval;
     }
 
@@ -61,9 +60,9 @@ contract PredictionGame is KeeperCompatible {
         }
     }
 
-    function currentResult() external view returns (int) {
+    function currentResult() external view returns (int,uint) {
         (, int price, , , ) = priceFeed.latestRoundData();
-        return price;
+        return (price,block.timestamp);
     }
 
     function getResult() internal {
