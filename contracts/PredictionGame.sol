@@ -33,16 +33,19 @@ contract PredictionGame is KeeperCompatible {
     Prediction[] public predictions;
     uint public lastTimeStamp;
     uint public immutable interval;
+    string public name;
 
     constructor(
         address _tokenAddress,
         address _AggregatorAddress,
-        uint _interval
+        uint _interval,
+        string memory _name
     ) {
         IGameToken = IERC20(_tokenAddress);
         priceFeed = AggregatorV3Interface(_AggregatorAddress);
         lastTimeStamp = block.timestamp;
         interval = _interval;
+        name = _name;
     }
 
     function predict(int _value) external {
@@ -60,13 +63,12 @@ contract PredictionGame is KeeperCompatible {
         }
     }
 
-    function currentResult() external view returns (int,uint) {
+    function currentResult() external view returns (int, uint) {
         (, int price, , , ) = priceFeed.latestRoundData();
-        return (price,block.timestamp);
+        return (price, block.timestamp);
     }
 
     function getResult() internal {
-        (, int _actualValue, , , ) = priceFeed.latestRoundData();
         if (predictions.length < 10) {
             emit ContestCancelled();
             for (uint i = 0; i < predictions.length; i++) {
@@ -74,6 +76,7 @@ contract PredictionGame is KeeperCompatible {
             }
             return delete predictions;
         }
+        (, int _actualValue, , , ) = priceFeed.latestRoundData();
         Prediction memory temp;
         _getDifference(_actualValue);
         for (uint i = 0; i < 10; i++) {
