@@ -1,15 +1,27 @@
-# Basic Sample Hardhat Project
+# Predict and win (ETH/USD Exchange rate) ,Kovan testnet
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+Users can mint Game token from Website(first mint is free),and use that to be part of the game
 
-Try running some of the following tasks:
+if 10 people participated,the one who has the closest prediction wins
+if drawn,the earliest prediction gets better rank
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
+Rewards based on rank given below
+1. 4 Token
+2. 2.5 Token
+3. 1.5 Token
+4. 0.75 Token
+5. 0.25 Token
+6. 0.2 Token       
+7. 0.2 Token       
+8. 0.2 Token       
+9. 0.2 Token       
+10. 0.2 Token       
+
+GameToken deployed to
+```
+0x1379bc175B14C7F3f3687d6d34870ecd3A71Ed0C
+```
+PredictionGame deployed to
+```
+0x26e342f06cCb95554858f00AD3C9B3154c0a6822
 ```
