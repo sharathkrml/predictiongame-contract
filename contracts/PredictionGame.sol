@@ -15,9 +15,14 @@ contract PredictionGame is KeeperCompatible {
         int difference;
         address from;
     }
-    event NewPrediction(int value, uint time, address from);
-    event Result(int actual, Prediction[]);
-    event ContestCancelled();
+    event NewPrediction(
+        uint indexed contestId,
+        int value,
+        uint time,
+        address from
+    );
+    event Result(uint indexed contestId, int actual, Prediction[]);
+    event ContestCancelled(uint indexed contestId);
     uint[10] public rewardArray = [
         4000000000000000000,
         2500000000000000000,
@@ -34,6 +39,7 @@ contract PredictionGame is KeeperCompatible {
     uint public lastTimeStamp;
     uint public immutable interval;
     string public name;
+    uint public contestId;
 
     constructor(
         address _tokenAddress,
@@ -52,7 +58,7 @@ contract PredictionGame is KeeperCompatible {
         require(predictions.length < 10, "maximum predictions completed");
         IGameToken.transferFrom(msg.sender, address(this), 1 ether);
         predictions.push(Prediction(_value, block.timestamp, 0, msg.sender));
-        emit NewPrediction(_value, block.timestamp, msg.sender);
+        emit NewPrediction(contestId, _value, block.timestamp, msg.sender);
     }
 
     function _getDifference(int _actualValue) internal {
@@ -69,14 +75,15 @@ contract PredictionGame is KeeperCompatible {
     }
 
     function getResult() internal {
+        (, int _actualValue, , , ) = priceFeed.latestRoundData();
         if (predictions.length < 10) {
-            emit ContestCancelled();
+            emit ContestCancelled(contestId);
+            contestId++;
             for (uint i = 0; i < predictions.length; i++) {
                 IGameToken.transfer(predictions[i].from, 1 ether);
             }
             return delete predictions;
         }
-        (, int _actualValue, , , ) = priceFeed.latestRoundData();
         Prediction memory temp;
         _getDifference(_actualValue);
         for (uint i = 0; i < 10; i++) {
@@ -94,7 +101,8 @@ contract PredictionGame is KeeperCompatible {
                 }
             }
         }
-        emit Result(_actualValue, predictions);
+        emit Result(contestId, _actualValue, predictions);
+        contestId++;
         for (uint i = 0; i < 10; i++) {
             IGameToken.transfer(predictions[i].from, rewardArray[i]);
         }
