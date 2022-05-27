@@ -1,5 +1,7 @@
 # Predict and win (ETH/USD Exchange rate) ,Kovan testnet
 
+## Automated with Chainlink Keepers & Price data from Chainlink Data Fields
+
 Users can mint Game token from Website(first mint is free),and use that to be part of the game
 
 if 10 people participated,the one who has the closest prediction wins
@@ -18,10 +20,11 @@ Rewards based on rank given below
 10. 0.2 Token       
 
 GameToken deployed to
-```
-0x1379bc175B14C7F3f3687d6d34870ecd3A71Ed0C
-```
+
+[0x1379bc175B14C7F3f3687d6d34870ecd3A71Ed0C](https://kovan.etherscan.io/address/0x1379bc175B14C7F3f3687d6d34870ecd3A71Ed0C)
+
 PredictionGame deployed to
-```
-0x26e342f06cCb95554858f00AD3C9B3154c0a6822
-```
+
+[0x26e342f06cCb95554858f00AD3C9B3154c0a6822](https://kovan.etherscan.io/address/0x26e342f06cCb95554858f00AD3C9B3154c0a6822)
+
+Demo video [link](https://www.youtube.com/watch?v=nnLAr2alXjk)
