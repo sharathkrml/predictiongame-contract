@@ -5,7 +5,9 @@
 Users can mint Game token from Website(first mint is free),and use that to be part of the game
 
 if 10 people participated,the one who has the closest prediction wins
-if drawn,the earliest prediction gets better rank
+if draw,the earliest prediction gets better rank
+
+if participation < 10,tokens will be refunded
 
 Rewards based on rank given below
 1. 4 Token
