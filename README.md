@@ -1,6 +1,6 @@
 # Predict and win (ETH/USD Exchange rate) ,Kovan testnet
 
-## Automated with Chainlink Keepers & Price data from Chainlink Data Fields
+## Automated with Chainlink Keepers & Price data from Chainlink Data Feeds
 
 Users can mint Game token from Website(first mint is free),and use that to be part of the game
 
